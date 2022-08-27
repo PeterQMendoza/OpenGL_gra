@@ -32,6 +32,7 @@ ${CMAKE_SOURCE_DIR}/src/*.hpp
 # Configurar activos del archivo cabecera
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/helpers/RootDir.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/helpers/RootDir.h)
 include_directories(${CMAKE_BINARY_DIR}/src)
+include_directories(${CMAKE_BINARY_DIR}/src/entity)
 
 # Definir los ejecutables
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})
@@ -47,20 +48,27 @@ find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 message(STATUS "Encontrado FreeGlut en ${GLUT_INCLUDE_DIR}")
 
+#GLEW
+find_path(GLEW_INCLUDE_DIR GL/glew.h)
+find_library(GLEW_LIBRARY NAMES GLEW glew32 glew glew32s PATH_SUFFIXES lib64)
+find_package(GLEW REQUIRED)
+message(STATUS "Encontrado GLEW en ${GLEW_INCLUDE_DIR}")
+
 # Threads
 find_package(Threads REQUIRED)
 
 add_library(libfreeglut_obj OBJECT ${CMAKE_SOURCE_DIR}/lib/)
-target_link_libraries(libfreeglut_obj PUBLIC OpenGL::GL GLUT::GLUT Threads::Threads)
+target_link_libraries(libfreeglut_obj PUBLIC OpenGL::GL GLUT::GLUT GLEW::GLEW Threads::Threads)
 set_target_properties(libfreeglut_obj PROPERTIES LINKER_LAGUAGE CXX)
 
 #Poner todas las librerias dentro de una variable
-set(LIBS ${GLUT_LIBRARY} ${OPENGL_LIBRARIES})
+set(LIBS ${GLUT_LIBRARY} ${GLEW_LIBRARY} ${OPENGL_LIBRARIES})
 
 # Definir los include DIRs
 include_directories(
     "${CMAKE_SOURCE_DIR}/lib/"
     "${CMAKE_SOURCE_DIR}/bin/"
+    "${CMAKE_SOURCE_DIR}/include/"
     "${CMAKE_SOURCE_DIR}/include/GL/"
 )
 

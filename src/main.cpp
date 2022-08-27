@@ -1,43 +1,21 @@
-#include <stdlib.h>
-#include <GL/glut.h>
+#include <iostream>
+#include <ratio>
+#include <chrono>
 
-void keyboard(unsigned char key, int x, int y);
-void display(void);
+#include "entity/unity.hpp"
+#include "entity/date.hpp"
 
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("Welcome Peter's app");
-    glutKeyboardFunc(&keyboard);
-    glutDisplayFunc(&display);
-    glutMainLoop();
-    
+int main(int argc, char** argv)
+{
+    // Contar la cantidad de dias que tiene el a;os
+    std::chrono::system_clock::time_point today=std::chrono::system_clock::now();
+    time_t now=std::chrono::system_clock::to_time_t(today);
+    Date* date=new Date(now);
+    // std::cout<<"The date:"<<ctime(&now)<<std::endl;
+    // std::cout<<"and it's have "<<date->countDaysfromYear()<<" days"<<std::endl;
+    std::cout<<"have between: "<<date->dayBetweenDate()<<std::endl;
+
+    delete date;
+
     return EXIT_SUCCESS;
-}
- 
- 
-void keyboard(unsigned char key, int x, int y)
-{
-    switch (key)
-    {
-        case '\x1B':
-            exit(EXIT_SUCCESS);
-            break;
-    }
-}
- 
- 
-void display()
-{
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glColor3f(1.0f, 0.0f, 0.0f);
-
-    glBegin(GL_POLYGON);
-    glVertex2f(-0.5f, -0.5f);
-    glVertex2f( 0.5f, -0.5f);
-    glVertex2f( 0.5f,  0.5f);
-    glVertex2f(-0.5f,  0.5f);
-    glEnd();
-
-    glFlush();
 }

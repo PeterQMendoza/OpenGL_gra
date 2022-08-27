@@ -1,1 +1,5 @@
+# Todos los archivos son revisados dentro de la repo con LF
 *text=auto
+
+# Estos archivos son revisados fuera usando CRLF localmente
+*.bat eol=CRLF
